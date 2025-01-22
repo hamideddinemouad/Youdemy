@@ -5,8 +5,8 @@ include_once "student.php";
 include_once "teacher.php";
 include_once "db.php";
 include_once "course.php";
-echo "setup file included";
-var_dump($_SESSION);
+// echo "setup file included";
+// var_dump($_SESSION);
 if (isset($_SESSION['user']))
 {
     echo "session user set";
@@ -29,7 +29,7 @@ if (isset($_SESSION['user']))
 }
 else
 {
-    echo "session user not set";
+    // echo "session user not set";
     $user = new User($db);
 }
 ?>

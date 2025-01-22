@@ -1,8 +1,6 @@
 <?php
-
 include_once "signuprouting.php";
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,6 +47,23 @@ include_once "signuprouting.php";
 </div>";
 unset($_SESSION['error']);
 } ?>
+<?php if (isset($_SESSION['teacher already registred']))
+{
+    echo "    <div id='teacher-exists' class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
+        <strong class='font-bold'>Error!</strong>
+        <span class='block sm:inline'>A teacher with this email is already registered.</span>
+    </div>";
+    unset($_SESSION['teacher already registred']);
+}
+if (isset($_SESSION['teacher demand submitted']))
+{
+    echo "<div id='teacher-demand-submitted' class='bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative' role='alert'>
+        <strong class='font-bold'>Success!</strong>
+        <span class='block sm:inline'>Your demand to become a teacher has been submitted successfully.</span>
+    </div>";
+    unset($_SESSION['teacher demand submitted']);
+}
+?>
     <div class="bg-white rounded-lg shadow-lg p-8 w-96">
         <h2 class="text-2xl font-bold text-blue mb-6 text-center">Sign Up</h2>
         <form action="signuprouting.php" method="POST" onsubmit="return validateForm()">

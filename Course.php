@@ -80,12 +80,10 @@ class Course
         courses.id, 
         course_tags.course_id, 
         tags.id as tag_id, 
-        users.username as teacher, 
-        categories.name as categorie
+        users.username as teacher 
         from course_tags
         join tags on course_tags.tag_id  = tags.id 
         join courses on courses.id = course_tags.course_id 
-        join categories on courses.category_id = categories.id 
         join users on teacher_id = users.id 
         WHERE courses.title = ?;";
         $result = $this->secureQuery($this->db, $stmnt, [$courseName]);
@@ -97,7 +95,7 @@ class Course
         $this->id = $result[0]['course_id'];
         $this->title = $result[0]['title'];
         $this->description = $result[0]['description'];
-        $this->categorie = $result[0]['categorie'];
+        // $this->categorie = $result[0]['categorie'];
         $this->teacher = $result[0]['teacher'];
         $this->totalStudents = count($result);
 

@@ -1,10 +1,11 @@
 <?php
 include_once "setup.php";
-var_dump($_POST);
+// var_dump($_POST);
 if (isset($_POST['signup']))
 {
 $signedup = $user->signup();
 if ($signedup !== 'false') {
+    echo "thisis signed up $signedup from signuprouting.php";
     switch ($signedup['role']) {
         case 'student':
             echo "it's a student echo from signup.php";
@@ -17,6 +18,10 @@ if ($signedup !== 'false') {
             $user = new Teacher($db, $signedup['name'], $signedup['email'], $signedup['role'], $signedup['id'], $signedup['password']);
             $_SESSION['user'] = $user->encode();
             header('location: index.php');
+            exit();
+        case 'teacherrequest':
+            echo "teacher request submitted";
+            header('location: signup.php');
             exit();
     }
 }

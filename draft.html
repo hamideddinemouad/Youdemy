@@ -1,7 +1,37 @@
-<?php if ($_SESSION['error'] === 'User already exists')
-{
-    echo "<div id='user-exists' class='hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
-<strong class='font-bold'>Error!</strong>
-<span class='block sm:inline'>A user with this email already exists.</span>
-</div>";
-} ?>
+<?php
+session_start();
+include "user.php";
+include "db.php";
+include "Course.php";
+
+$course_id = $_GET['id'];
+$course = new Course($db);
+$course_details = ['id'=>$course->getId(), 'title' =>$course->getTitle(), 'description' =>$course->getDescription()];
+
+if (isset($_SESSION['user']) && $_SESSION['user']->role === 'student') {
+    $user = $_SESSION['user'];
+} else {
+    $user = null;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Details</title>
+</head>
+<body>
+    <h1><?php echo $course_details['title']; ?></h1>
+    <p><?php echo $course_details['description']; ?></p>
+
+    <?php if ($user): ?>
+        <form action="enroll.php" method="POST">
+            <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
+            <button type="submit">Enroll in this course</button>
+        </form>
+    <?php else: ?>
+        <p>Please <a href="login.php">login</a> to enroll in this course.</p>
+    <?php endif; ?>
+</body>
+</html>

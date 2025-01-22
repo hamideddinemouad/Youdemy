@@ -31,6 +31,7 @@ class User {
         }
         return 0;
     }
+    
     public function signUp(){
 
         // var_dump($_POST);
@@ -39,14 +40,20 @@ class User {
         //if teacher register need admin approval enter in teaachers_validation table
         //if teacher already registered return an error in front end
         // if teacher already sent request return an error in front end
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['role'] === 'teacher')
+        {
+            return $this->teacherRequest();
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST')
         {
-            echo "from signup user.php method is indeed post";
+            // echo "from signup user.php method is indeed post";
             $name = $_POST['name'];
             $email = $_POST['email'];
-            $password = $_POST['password'];
+            echo "password from signup in user.php" . $_POST['password'];
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $stmnt = "insert into users (username, email, password, role) values (?, ?, ?, ?);";
             $params = [$name, $email, $password, 'student'];
+            
             try {
                 $result = $this->secureQuery($this->db, $stmnt, $params);
                 }
@@ -58,16 +65,45 @@ class User {
         }
         return 'false';
     }
+    public function teacherRequest()
+    {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $stmnt = "select * from users where email = ?";
+        $params = [$email];
+        $isalreadyregistred = $this->secureQuery($this->db, $stmnt, $params);
+
+        $stmnt = "select * from teachers_demands where email = ?";
+        $demandalreadyin = $this->secureQuery($this->db, $stmnt, $params);
+        if (count($isalreadyregistred) !== 0 || count($demandalreadyin) !== 0)
+        {
+            $_SESSION['teacher already registred'];
+            return "false";
+        }
+        $params = [$name, $email, $password];
+        $stmnt = "insert into teachers_demands (username, email, password) values (?, ?, ?)";
+        $this->secureQuery($this->db, $stmnt, $params);
+        $_SESSION['teacher demand submitted'] = 1;
+        return ["role" => "teacherrequest"];
+    }
     public function fork($email, $password)
     {
-        $stmnt = "select * from users where email = ? and password = ?;";
+        $stmnt = "select * from users where email = ?";
+        $params = [$email];
+        $result = $this->secureQuery($this->db, $stmnt, $params);
         // echo $email;
         // echo $password;
-        $params = [$email, $password];
-        $result = $this->secureQuery($this->db, $stmnt, $params);
-        if (count($result) === 0)
-        {
-            // var_dump($result);
+        echo "i am comparing password from fork funcpassword is " . $password;
+        echo "result of password_verify" . password_verify($password, $result[0]['password']);
+        if (count($result) === 0 || password_verify($password, $result[0]['password']) === 0) {
+            $count = count($result);
+            if (!password_verify($password, $result[0]['password'])) {
+                echo "passwords don't match";
+            }
+            echo "count is $count  from fork func";
+            echo "Result from database query: fork func";
+            print_r($result);
             return 0;
         }
         return ([

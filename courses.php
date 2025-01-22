@@ -1,4 +1,5 @@
 <?php
+include_once "Setup.php";
 include_once "Course.php";
 include_once "db.php";
 $course = new Course($db);
@@ -45,10 +46,17 @@ $course->search($_GET['course']);
         <p class="text-gray-600 p-2">Total students: <?php echo htmlspecialchars($course->getTotalStudents()) ?></p>
         <p class="text-gray-600 p-2">Teacher: <?php echo htmlspecialchars($course->getTeacher()) ?></p>
         <p class="text-gray-600 p-2">Tags: <?php $course->renderTags(); echo $course->getTagsHtml(); ?></p>
-        <a href="your-url-here" class="text-white bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded-full text-center inline-block transition-colors duration-300">
-            View Course
-        </a>
-    </div>
+        <?php if (isset($_SESSION['user'])): ?>
+        <form action="sign" method="POST" class="mt-4">
+            <input type="hidden" name="course_id" value="<?php echo htmlspecialchars($course->getId()); ?>">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Enroll in this course
+            </button>
+        </form>
+        <?php else: ?>
+        <p class="mt-4">Please <a href="login.php" class="text-blue-500 hover:underline">login</a> to enroll in this course.</p>
+        <?php endif; ?>
+        </div>
     <!-- Repeat Course Cards as needed -->
 </div>
     <!-- Footer -->
