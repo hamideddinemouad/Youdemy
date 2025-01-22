@@ -1,14 +1,6 @@
 <?php
-session_start();
-include_once "setup.php";
-$signedup = $user->signupStudent($db);
-if ($signedup === 'true')
-{
-    $_SESSION['user'] = $user->encode();
-    $_SESSION['connected'] = 1;
-    header('Location: index.php');
-    exit();
-};
+
+include_once "signuprouting.php";
 ?>
 
 <!DOCTYPE html>
@@ -49,10 +41,18 @@ if ($signedup === 'true')
             <?php include "nav.php"; ?>
         </div>
     </header>
-
+    <?php if (isset($_SESSION['error']))
+{
+    echo "<div id='user-exists' class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
+<strong class='font-bold'>Error!</strong>
+<span class='block sm:inline'>A user with this email already exists.</span>
+</div>";
+unset($_SESSION['error']);
+} ?>
     <div class="bg-white rounded-lg shadow-lg p-8 w-96">
         <h2 class="text-2xl font-bold text-blue mb-6 text-center">Sign Up</h2>
-        <form action="signup.php" method="POST" onsubmit="return validateForm()">
+        <form action="signuprouting.php" method="POST" onsubmit="return validateForm()">
+            <input type="hidden" name = "signup" value= 1>
             <div class="mb-4">
                 <label for="name" class="block text-gray">Full Name</label>
                 <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue" placeholder="Your Name">

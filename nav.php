@@ -1,7 +1,7 @@
 <?php include_once "Setup.php"; ?>
 <nav>
 <?php 
-    if ($user->getisguest() === 'false')
+    if (isset($_SESSION['user']))
     {
         $username = $user->getname();
         echo 
