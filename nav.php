@@ -10,7 +10,7 @@
         <li><a href='http://localhost:8000/home.php' class='text-gray-700 hover:text-blue-600'>Home</a></li>
         <li><a href='http://localhost:8000/dashboard.php' class='text-gray-700 hover:text-blue-600'>Dashboard</a></li>
         <li class = 'text-xl font-bold text-blue-600'>$username</li>
-        <li><a href='http://localhost:8000/logout.php' class='text-gray-700 hover:text-blue-600'>Logout</a></li>
+        <li><a href='http://localhost:8000/logout.php' class='text-gray-700 hover:text-blue-600'>logout</a></li>
         </ul>
         ";
     }

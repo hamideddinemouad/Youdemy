@@ -18,9 +18,13 @@ class Student extends User{
         $this->role = $role;
         $this->id = $id;
         $this->password = $password;
+        $this->login();
     }
     public function getname() {
         return $this->name;
+    }
+    public function login(){
+        
     }
     // public function signUp(){
 

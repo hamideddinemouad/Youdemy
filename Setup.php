@@ -1,5 +1,5 @@
 <?php
-// session_start();
+session_start();
 include_once "user.php";
 include_once "student.php";
 include_once "teacher.php";

@@ -16,9 +16,20 @@ class User {
     }
     public function logout()
     {
+        session_start();
         session_destroy();
         header('location: index.php');
         exit();
+    }
+    public function login()
+    {
+        if (isset($_POST))
+        {
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            return $this->fork($email, $password);
+        }
+        return 0;
     }
     public function signUp(){
 

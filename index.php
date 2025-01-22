@@ -1,5 +1,4 @@
 <?php
-session_start();
 include_once "Setup.php";
 // var_dump($user);
 ?>

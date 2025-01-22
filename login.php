@@ -26,7 +26,13 @@
     </header>
     <div class="bg-white rounded-lg shadow-lg p-8 w-96">
         <h2 class="text-2xl font-bold text-blue mb-6 text-center">Login</h2>
-        <form>
+        <form action="loginredirect.php" method="POST">
+            <?php
+            if (isset($_SESSION['incorrect'])) {
+                echo '<p class="text-red-500 text-center mb-4">User or password not correct</p>';
+                unset($_SESSION['incorrect']);
+            }
+            ?>
             <div class="mb-4">
                 <label for="email" class="block text-gray">Email</label>
                 <input type="email" id="email" name="email" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue" placeholder="you@example.com">
@@ -35,6 +41,7 @@
                 <label for="password" class="block text-gray">Password</label>
                 <input type="password" id="password" name="password" required class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue" placeholder="Your Password">
             </div>
+
             <button type="submit" class="w-full bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700 transition duration-200">Login</button>
         </form>
         <p class="mt-4 text-gray text-center">
