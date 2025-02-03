@@ -68,6 +68,36 @@ class Course
     public function getTotalStudents() {
         return $this->totalStudents;
     }
+    public static function renderCourseCatalog($db, $page = 1, $coursesPerPage = 10)
+{
+    $offset = ($page - 1) * $coursesPerPage;
+    $stmnt = "SELECT * FROM courses LIMIT ? OFFSET ?";
+    $result = Course::secureQuery($db, $stmnt, [$coursesPerPage, $offset]);
+
+    $catalogHtml = '<div class="course-catalog">';
+    foreach ($result as $row) {
+        $title = htmlspecialchars($row['title']);
+        $description = htmlspecialchars($row['description']);
+        $catalogHtml .= "<div class='course-item'>
+            <h3 class='course-title'>$title</h3>
+            <p class='course-description'>$description</p>
+            <a href='http://localhost:8000/courses.php/?course=$title' class='view-course-link'>View Course</a>
+        </div>";
+    }
+    $catalogHtml .= '</div>';
+
+    // Pagination controls
+    $totalCourses = Course::secureQuery($db, "SELECT COUNT(*) as count FROM courses")[0]['count'];
+    $totalPages = ceil($totalCourses / $coursesPerPage);
+
+    $catalogHtml .= '<div class="pagination">';
+    for ($i = 1; $i <= $totalPages; $i++) {
+        $catalogHtml .= "<a href='?page=$i' class='pagination-link'>$i</a> ";
+    }
+    $catalogHtml .= '</div>';
+
+    return $catalogHtml;
+}
     // public static function getall($db)
     // {
     //     $db->query('select * from courses');
